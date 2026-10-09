@@ -184,11 +184,7 @@ export function SkillsOrbit() {
         <div
           aria-hidden
           className="absolute top-1/2 left-1/2 grid size-[22%] -translate-1/2 place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,#fff,var(--accent)_25%,var(--accent-2)_60%,transparent_72%)] shadow-[0_0_80px_10px_color-mix(in_oklab,var(--accent)_45%,transparent)]"
-        >
-          <span className="font-display text-[clamp(0.8rem,2vw,1.2rem)] font-black text-[var(--void-0)] [font-stretch:150%]">
-            SS
-          </span>
-        </div>
+        />
 
         <ul
           aria-label={touch ? undefined : "Skills"}

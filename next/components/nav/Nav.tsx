@@ -105,7 +105,7 @@ export function Nav() {
 
   const meta = isHome
     ? (sections.find((s) => s.id === active) ?? sections[0])
-    : { code: "SYS//--", label: "Off course" };
+    : { label: "Off course" };
 
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
@@ -157,24 +157,24 @@ export function Nav() {
             <button
               type="button"
               onClick={scrollTop}
-              aria-label="SS, back to top"
+              aria-label="Back to top"
               className="relative grid size-10 place-items-center rounded-full"
             >
               <ProgressRing />
-              <span className="font-display text-[11px] font-black [font-stretch:150%]">
-                SS
+              <span aria-hidden className="text-sm">
+                ↑
               </span>
             </button>
           ) : (
             <Link
               href="/"
               transitionTypes={["nav-back"]}
-              aria-label="SS, home"
+              aria-label="Home"
               className="relative grid size-10 place-items-center rounded-full"
             >
               <ProgressRing />
-              <span className="font-display text-[11px] font-black [font-stretch:150%]">
-                SS
+              <span aria-hidden className="text-sm">
+                ←
               </span>
             </Link>
           )}
@@ -185,14 +185,14 @@ export function Nav() {
           >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
-                key={meta.code}
+                key={meta.label}
                 initial={{ y: 14, opacity: 0, filter: "blur(4px)" }}
                 animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                 exit={{ y: -14, opacity: 0, filter: "blur(4px)" }}
                 transition={{ duration: 0.45, ease: ease.outExpo }}
                 className="block whitespace-nowrap"
               >
-                <span className="text-accent">{meta.code}</span> {meta.label}
+                <span className="text-accent">●</span> {meta.label}
               </motion.span>
             </AnimatePresence>
           </div>

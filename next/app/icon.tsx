@@ -20,9 +20,7 @@ export default function Icon() {
         fontWeight: 900,
         letterSpacing: -1,
       }}
-    >
-      SS
-    </div>,
+    ></div>,
     size,
   );
 }
