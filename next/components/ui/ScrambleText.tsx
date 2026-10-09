@@ -84,7 +84,7 @@ export function ScrambleText({
 
       return () => gsap.ticker.remove(tick);
     },
-    { scope: root, dependencies: [text] },
+    { scope: root, dependencies: [text, start, end, trigger] },
   );
 
   return (
