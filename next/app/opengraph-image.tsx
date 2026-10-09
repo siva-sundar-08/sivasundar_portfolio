@@ -22,7 +22,7 @@ export default function OpengraphImage() {
       }}
     >
       <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: "#3ef0ff" }}>
-        SYS//00 · SIGNAL
+        SOFTWARE ENGINEER
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div

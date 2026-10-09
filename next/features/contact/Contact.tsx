@@ -20,18 +20,18 @@ export function Contact() {
           intro="Building an iOS app or a web interface that needs care? Open a channel. Messages land directly in my inbox."
         />
       </div>
-      <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+      <div className="relative mx-auto grid max-w-7xl items-start gap-10 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-16">
         <div>
-          <ul className="flex flex-wrap gap-3 lg:flex-col lg:items-start">
+          <ul className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
             {[...site.socials, { label: "CV", href: site.cvUrl, handle: "Résumé" }].map(
               (link) => (
                 <li key={link.label}>
-                  <Magnetic>
+                  <Magnetic className="w-full">
                     <a
                       href={link.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group glass flex flex-col gap-1 rounded-2xl px-5 py-4 transition-colors"
+                      className="group glass flex w-full flex-col gap-1 rounded-2xl px-5 py-4 transition-colors"
                     >
                       <span className="hud transition-colors group-hover:text-accent">
                         {link.label} ↗

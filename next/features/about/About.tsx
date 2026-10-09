@@ -32,27 +32,6 @@ export function About() {
         });
       });
 
-      // Spec panels float at different depths: the deeper, the slower.
-      gsap.utils.toArray<HTMLElement>("[data-depth]").forEach((panel) => {
-        const depth = Number(panel.dataset.depth ?? 1);
-        gsap.fromTo(
-          panel,
-          { yPercent: 40 * depth, rotateX: 18 * depth, opacity: 0 },
-          {
-            yPercent: -30 * depth,
-            rotateX: -6 * depth,
-            opacity: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top 90%",
-              end: "bottom top",
-              scrub: 0.8,
-            },
-          },
-        );
-      });
-
       gsap.fromTo(
         ".about-portrait",
         {
@@ -121,7 +100,7 @@ export function About() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[15rem] [perspective:1200px] sm:max-w-[17rem] lg:max-w-[19rem]">
+        <div className="relative mx-auto w-full max-w-[15rem] sm:max-w-[17rem] lg:max-w-[19rem]">
           {/* No frame: the portrait's dark backdrop dissolves straight into the page. */}
           <figure className="relative">
             <div className="about-portrait relative [mask-image:radial-gradient(ellipse_70%_75%_at_50%_42%,#000_55%,transparent_100%)]">
@@ -135,41 +114,9 @@ export function About() {
               />
             </div>
             <figcaption className="-mt-2 flex justify-center gap-4 hud">
-              <span>ID · SS-0001</span>
               <span className="text-accent">● Online</span>
             </figcaption>
           </figure>
-
-          <dl className="pointer-events-none absolute inset-0 hidden sm:block">
-            {site.specs.map((spec, i) => (
-              <div
-                key={spec.label}
-                data-depth={(i % 2) + 1}
-                className={[
-                  "glass absolute! w-40 px-4 py-3 [--glass-blur:14px]",
-                  i === 0 && "top-2 -left-32",
-                  i === 1 && "top-1/4 -right-28",
-                  i === 2 && "bottom-1/4 -left-36",
-                  i === 3 && "-right-24 bottom-2",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-              >
-                <dt className="hud">{spec.label}</dt>
-                <dd className="mt-1 font-display text-sm font-semibold [font-stretch:120%]">
-                  {spec.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-          <dl className="mt-4 grid grid-cols-2 gap-3 sm:hidden">
-            {site.specs.map((spec) => (
-              <div key={spec.label} className="glass px-4 py-3 [--glass-blur:14px]">
-                <dt className="hud">{spec.label}</dt>
-                <dd className="mt-1 font-display text-sm font-semibold">{spec.value}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </div>
     </section>

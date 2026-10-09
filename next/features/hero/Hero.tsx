@@ -218,7 +218,7 @@ export function Hero() {
 
         {/* Intro: what the visitor sees before scrolling. */}
         <div className="hero-intro pointer-events-none absolute inset-x-0 bottom-[18svh] flex flex-col items-center gap-5 text-center motion-reduce:hidden">
-          <p className="hud">Siva Sundar · iOS & Web</p>
+          <p className="hud">Siva Sundar · Software Engineer</p>
           <p className="max-w-md px-6 font-display text-base text-ink-dim [font-stretch:115%] md:text-lg">
             A signal is forming. Scroll to bring it into focus.
           </p>
@@ -291,7 +291,7 @@ export function Hero() {
         >
           <div className="flex flex-col gap-2">
             <span className="hud">
-              SYS//00 · <span ref={stageRef}>{stages[0].label}</span>
+              <span ref={stageRef}>{stages[0].label}</span>
             </span>
             <span className="relative block h-px w-40 bg-white/10 md:w-56">
               <span
