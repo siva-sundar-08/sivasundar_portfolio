@@ -195,21 +195,24 @@ export function Hero() {
           <div className="absolute top-1/2 left-1/2 size-[min(46vmin,360px)] -translate-1/2 rounded-full border border-white/10 opacity-50 [background:conic-gradient(from_120deg,transparent,color-mix(in_oklab,var(--accent)_40%,transparent),transparent_40%,color-mix(in_oklab,var(--accent-3)_35%,transparent),transparent_75%)] [mask:radial-gradient(circle,transparent_62%,#000_63%,#000_64%,transparent_65%)]" />
         </div>
 
-        {showScene ? (
-          <div
-            className="hero-canvas absolute inset-0 transition-opacity duration-1000"
-            style={{ opacity: sceneReady ? 1 : 0 }}
-            ref={(el) => {
-              if (el && !sceneReady) requestAnimationFrame(() => setSceneReady(true));
-            }}
-          >
-            {heroSequence.type === "frames" ? (
-              <FrameSequence live={live} active={active} {...heroSequence} />
-            ) : quality === "high" || quality === "low" ? (
-              <HeroScene live={live} quality={quality} active={active} mode={mode} />
-            ) : null}
-          </div>
-        ) : null}
+        {/* Outer layer: GSAP fades it out at the end. Inner layer: fades in once WebGL is up. */}
+        <div className="hero-canvas absolute inset-0">
+          {showScene ? (
+            <div
+              className="absolute inset-0 transition-opacity duration-1000"
+              style={{ opacity: sceneReady ? 1 : 0 }}
+              ref={(el) => {
+                if (el && !sceneReady) requestAnimationFrame(() => setSceneReady(true));
+              }}
+            >
+              {heroSequence.type === "frames" ? (
+                <FrameSequence live={live} active={active} {...heroSequence} />
+              ) : quality === "high" || quality === "low" ? (
+                <HeroScene live={live} quality={quality} active={active} mode={mode} />
+              ) : null}
+            </div>
+          ) : null}
+        </div>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[var(--void-0)] opacity-70" />
 
