@@ -43,19 +43,18 @@ npm run dev                  # http://localhost:3000
 ```
 next/
 ├─ app/                 routes, metadata, sitemap, robots, OG image, icon
-│  ├─ page.tsx          home (server component composing the sections)
-│  └─ work/[slug]/      case studies, statically generated per project
+│  └─ page.tsx          home (server component composing the sections)
 ├─ components/
 │  ├─ nav/              floating glass nav: progress ring, section HUD, sound, mode, menu
 │  ├─ providers/        Lenis smooth scroll, Void/Aurora mode, ambient sound
 │  └─ ui/               Cursor, Magnetic, ScrambleText, MorphHeading, SectionHeader, Footer
 ├─ features/            one folder per section
 │  ├─ hero/             scroll sequence, overlay, frame-sequence player, WebGL scene + GLSL
-│  └─ about/ projects/ skills/ experience/ contact/
-├─ content/             all copy and data, typed (site, projects, skills, experience, hero)
+│  └─ about/ skills/ experience/ contact/
+├─ content/             all copy and data, typed (site, skills, experience, hero)
 ├─ lib/                 GSAP registration, motion presets, quality tiers, hooks
 ├─ styles/globals.css   design tokens, glass/HUD utilities, view transitions, grain
-├─ public/images/       portrait and project covers
+├─ public/images/       portrait
 ├─ scripts/             extract-frames.sh
 └─ docs/                DESIGN-SYSTEM.md, ASSETS.md
 ```
@@ -68,11 +67,7 @@ respond: the hero, the scroll-driven sections, the nav, the cursor and the form.
 Everything visible comes from `content/*.ts`. The types in `content/types.ts` keep it consistent.
 
 - **Bio, roles, links, CV, spec panels**: `content/site.ts`
-- **Projects**: `content/projects.ts`. Each entry becomes a gallery card and a page at
-  `/work/<slug>`. Add a `cover` image (put the file in `public/images/`), or leave it out
-  and the card renders a holographic field tinted by `hue`. `overview` and `highlights`
-  are the case-study body.
-- **Skills**: `content/skills.ts`. Each group is one orbit ring.
+- **Skills**: `content/skills.ts`, sourced from your GitHub repos. Each group is one orbit ring; add a group and a ring appears.
 - **Experience**: `content/experience.ts`
 - **Section codes and labels** (`SYS//01 · Operator` …): `sections` in `content/site.ts`
 
@@ -134,11 +129,10 @@ arrive. The overlay, HUD and name reveal work the same either way.
 
 ## Quality (local production build, Lighthouse 12)
 
-| Page              | Performance | Accessibility | Best practices | SEO | CLS |
-| ----------------- | ----------- | ------------- | -------------- | --- | --- |
-| `/` desktop       | 99          | 100           | 100            | 100 | 0   |
-| `/` mobile        | 92          | 100           | 100            | 100 | 0   |
-| `/work/*` desktop | 100         | 100           | 100            | 100 | 0   |
+| Page        | Performance | Accessibility | Best practices | SEO | CLS |
+| ----------- | ----------- | ------------- | -------------- | --- | --- |
+| `/` desktop | 99          | 100           | 100            | 100 | 0   |
+| `/` mobile  | 92          | 100           | 100            | 100 | 0   |
 
 Lighthouse doesn't scroll or interact, so these scores measure first load. The 3D scene's
 cost comes after the first interaction, by design.
@@ -147,12 +141,8 @@ cost comes after the first interaction, by design.
 
 - The variable-font heading morph changes letter widths as you scroll. Each heading is a
   single left-aligned text node, so nothing around it shifts, but the heading's own width does.
-- On case-study pages, `params` is read inside `<Suspense>` to keep navigation instant. The
-  pages are fully prerendered, so the skeleton fallback should never show for known slugs.
 - In development, edits to `styles/globals.css` sometimes don't hot-reload with the
   Turbopack Tailwind loader. Restart `npm run dev` if a CSS change doesn't appear.
-- Shared-element morphs (card → case study) need the View Transitions API (Chromium and
-  recent Safari and Firefox). Other browsers navigate instantly, without the morph.
 
 See `docs/DESIGN-SYSTEM.md` for tokens, motion presets and components, and
 `docs/ASSETS.md` for the assets still needed.

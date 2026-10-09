@@ -158,7 +158,7 @@ export function Experience() {
                     />
                     <p className="hud tabular-nums">{item.period}</p>
                   </div>
-                  <h3 className="mt-4 font-display text-2xl leading-tight font-extrabold uppercase [font-stretch:125%]">
+                  <h3 className="mt-4 font-display text-lg leading-tight font-extrabold uppercase [font-stretch:125%] md:text-xl">
                     {item.role}
                   </h3>
                   <p className="mt-2 text-ink">{item.company}</p>

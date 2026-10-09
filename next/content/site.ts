@@ -18,7 +18,7 @@ export const site = {
   specs: [
     { label: "Primary", value: "iOS · SwiftUI" },
     { label: "Secondary", value: "React · Web" },
-    { label: "Cross-platform", value: "Flutter · Dart" },
+    { label: "Backend", value: "Java · Spring Boot" },
     { label: "Internships", value: "02 completed" },
   ],
   cvUrl:
@@ -47,10 +47,9 @@ export const site = {
 export const sections = [
   { id: "hero", code: "SYS//00", label: "Signal" },
   { id: "about", code: "SYS//01", label: "Operator" },
-  { id: "projects", code: "SYS//02", label: "Artifacts" },
-  { id: "skills", code: "SYS//03", label: "Systems" },
-  { id: "experience", code: "SYS//04", label: "Trajectory" },
-  { id: "contact", code: "SYS//05", label: "Uplink" },
+  { id: "skills", code: "SYS//02", label: "Systems" },
+  { id: "experience", code: "SYS//03", label: "Trajectory" },
+  { id: "contact", code: "SYS//04", label: "Uplink" },
 ] as const;
 
 export type SectionId = (typeof sections)[number]["id"];

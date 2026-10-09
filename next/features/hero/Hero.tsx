@@ -219,7 +219,7 @@ export function Hero() {
         {/* Intro: what the visitor sees before scrolling. */}
         <div className="hero-intro pointer-events-none absolute inset-x-0 bottom-[18svh] flex flex-col items-center gap-5 text-center motion-reduce:hidden">
           <p className="hud">Siva Sundar · iOS & Web</p>
-          <p className="max-w-md px-6 font-display text-lg text-ink-dim [font-stretch:115%] md:text-xl">
+          <p className="max-w-md px-6 font-display text-base text-ink-dim [font-stretch:115%] md:text-lg">
             A signal is forming. Scroll to bring it into focus.
           </p>
           <span className="relative block h-14 w-px overflow-hidden bg-white/10">
@@ -240,7 +240,7 @@ export function Hero() {
               {[site.firstName, site.lastName].map((word) => (
                 <span
                   key={word}
-                  className="block display-wide text-[clamp(3.4rem,15vw,13.5rem)] whitespace-nowrap"
+                  className="block display-wide text-[clamp(2.75rem,10vw,8.5rem)] whitespace-nowrap"
                 >
                   {letters(word).map((char, i) => (
                     <span
@@ -265,11 +265,11 @@ export function Hero() {
           <div className="hero-reveal mt-9 flex flex-wrap justify-center gap-3 opacity-0 motion-reduce:opacity-100">
             <Magnetic>
               <a
-                href="#projects"
+                href="#about"
                 data-cursor="Explore"
                 className="glass inline-flex items-center gap-3 rounded-full px-6 py-3 font-mono text-xs tracking-[0.24em] uppercase transition-colors hover:text-[var(--accent)]"
               >
-                View work
+                About me
                 <span aria-hidden>↘</span>
               </a>
             </Magnetic>

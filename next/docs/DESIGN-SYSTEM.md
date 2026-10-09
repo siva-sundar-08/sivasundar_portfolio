@@ -71,8 +71,6 @@ foreground HUD panels faster (`data-depth` in About). Staggers: letters 35ms, it
 | `ScrambleText`  | client | Glyph noise resolving into text across a scroll range; zero layout shift                                                                   |
 | `MorphHeading`  | client | Variable-font width and weight that expand as the heading enters                                                                           |
 | `SectionHeader` | server | HUD code + MorphHeading + intro                                                                                                            |
-| `ProjectCard`   | client | 3D tilt, moving glare, holographic hover; shared-element morph into `/work/[slug]`                                                         |
-| `ProjectMedia`  | server | Cover image or holographic field                                                                                                           |
 | `SkillsOrbit`   | client | DOM-based 3D orbit: drag to spin, hover/focus to inspect                                                                                   |
 | `GravityField`  | client | Canvas 2D particles orbiting a pointer-driven gravity well                                                                                 |
 | `ContactForm`   | client | `useActionState` + Server Action, inline errors, animated success                                                                          |
