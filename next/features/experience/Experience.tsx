@@ -7,7 +7,8 @@ import { gsap, registerGsap, useGSAP } from "@/lib/gsap";
 import { cn } from "@/lib/cn";
 
 // A path through space in a 100 × 100 box, stretched to the timeline's height.
-const PATH = "M50 0 C 50 10, 88 14, 82 30 S 18 46, 22 62 S 70 82, 50 100";
+const PATH =
+  "M50 0 C 50 6, 84 8, 80 18 S 20 34, 22 44 S 80 58, 78 68 S 20 84, 24 92 S 50 98, 50 100";
 
 /**
  * Trajectory: an SVG path draws itself as you scroll, a comet rides its tip,
@@ -92,10 +93,10 @@ export function Experience() {
         <SectionHeader
           section="experience"
           title="Experience"
-          intro="Internships where I worked on applied development across mobile and IoT."
+          intro="From internships to a full-time role: building mobile and web products in Chennai."
         />
 
-        <div ref={timeline} className="relative min-h-[110svh] md:min-h-[130svh]">
+        <div ref={timeline} className="relative min-h-[180svh] md:min-h-[220svh]">
           <svg
             aria-hidden
             viewBox="0 0 100 100"
@@ -157,22 +158,33 @@ export function Experience() {
                       className="size-2 rounded-full bg-white/30 transition-all duration-500 group-[.is-lit]/stop:bg-[var(--accent)] group-[.is-lit]/stop:shadow-[0_0_14px_var(--accent)]"
                     />
                     <p className="hud tabular-nums">{item.period}</p>
+                    {item.current ? (
+                      <span className="rounded-full border border-[var(--accent)] px-2 py-0.5 hud text-accent">
+                        Now
+                      </span>
+                    ) : null}
                   </div>
                   <h3 className="mt-4 font-display text-lg leading-tight font-extrabold uppercase [font-stretch:125%] md:text-xl">
                     {item.role}
                   </h3>
-                  <p className="mt-2 text-ink">{item.company}</p>
+                  <p className="mt-2 text-ink">
+                    {item.company} <span className="text-ink-faint">· {item.type}</span>
+                  </p>
                   <p className="mt-3 text-sm leading-relaxed text-ink-dim">{item.note}</p>
                   <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-                    <span className="hud">{item.location}</span>
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hud transition-colors hover:text-accent"
-                    >
-                      Visit organization ↗
-                    </a>
+                    <span className="hud">
+                      {item.location} · {item.mode}
+                    </span>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hud transition-colors hover:text-accent"
+                      >
+                        Visit organization ↗
+                      </a>
+                    ) : null}
                   </div>
                 </li>
               );

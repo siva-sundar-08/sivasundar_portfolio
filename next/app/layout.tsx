@@ -65,6 +65,7 @@ const personJsonLd = {
   jobTitle: site.roles.join(" & "),
   description: site.description,
   sameAs: site.socials.map((s) => s.href),
+  worksFor: { "@type": "Organization", name: "ADRIG AI Technologies Pvt. Ltd." },
   knowsAbout: ["Swift", "SwiftUI", "iOS development", "React", "JavaScript", "Flutter"],
 };
 

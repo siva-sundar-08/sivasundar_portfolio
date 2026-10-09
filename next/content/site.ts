@@ -19,7 +19,7 @@ export const site = {
     { label: "Primary", value: "iOS · SwiftUI" },
     { label: "Secondary", value: "React · Web" },
     { label: "Backend", value: "Java · Spring Boot" },
-    { label: "Internships", value: "02 completed" },
+    { label: "Now", value: "SWE · ADRIG AI" },
   ],
   cvUrl:
     "https://drive.google.com/file/d/1yU2qlXJwt_IL1XOZVh8M_uM00A78jgsI/view?usp=sharing",

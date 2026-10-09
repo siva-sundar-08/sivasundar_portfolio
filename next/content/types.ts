@@ -22,8 +22,11 @@ export type ExperienceItem = {
   id: string;
   role: string;
   company: string;
+  type: "Full-time" | "Internship";
   period: string;
   location: string;
-  href: string;
+  mode: "On-site" | "Hybrid" | "Remote";
   note: string;
+  href?: string;
+  current?: boolean;
 };
