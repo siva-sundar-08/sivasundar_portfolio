@@ -14,7 +14,7 @@ type ScrambleTextProps = {
   /** ScrollTrigger start/end; progress across this range resolves the text. */
   start?: string;
   end?: string;
-  /** Element whose scroll position drives the effect (defaults to the text itself). */
+  /** Selector for an ancestor whose scroll position drives the effect (defaults to the text itself). */
   trigger?: string;
 };
 
@@ -65,11 +65,12 @@ export function ScrambleText({
       render(0);
       const tick = (time: number) => render(time);
       const st = ScrollTrigger.create({
-        trigger: trigger ?? el,
+        trigger: (trigger ? el.closest(trigger) : null) ?? el,
         start,
         end,
         onUpdate: (self) => {
           progress = self.progress;
+          render(gsap.ticker.time);
         },
         onToggle: (self) => {
           if (self.isActive) gsap.ticker.add(tick);

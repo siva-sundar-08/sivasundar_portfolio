@@ -10,10 +10,13 @@ export default function NotFound() {
         <span className="text-accent">ERR//404</span> · Signal lost
       </p>
       <h1 className="display-wide text-[clamp(3rem,12vw,9rem)] uppercase">Off course</h1>
-      <p className="text-ink-dim max-w-md">
+      <p className="max-w-md text-ink-dim">
         This coordinate is empty. The page may have moved, or it never existed.
       </p>
-      <Link href="/" className="glass rounded-full px-6 py-3 font-mono text-xs tracking-[0.24em] uppercase">
+      <Link
+        href="/"
+        className="glass rounded-full px-6 py-3 font-mono text-xs tracking-[0.24em] uppercase"
+      >
         Return to base
       </Link>
     </main>

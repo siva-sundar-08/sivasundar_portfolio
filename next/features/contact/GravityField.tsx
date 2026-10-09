@@ -2,7 +2,14 @@
 
 import { useEffect, useRef } from "react";
 
-type Particle = { x: number; y: number; vx: number; vy: number; r: number; hue: 0 | 1 | 2 };
+type Particle = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  r: number;
+  hue: 0 | 1 | 2;
+};
 
 /**
  * A 2D gravitational field behind the contact panel: particles orbit a
@@ -139,5 +146,11 @@ export function GravityField() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full opacity-70" />;
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden
+      className="absolute inset-0 size-full opacity-70"
+    />
+  );
 }

@@ -56,7 +56,11 @@ export function Experience() {
       gsap.utils.toArray<HTMLElement>(".exp-stop").forEach((stop) => {
         gsap.fromTo(
           stop,
-          { opacity: 0.15, x: stop.dataset.side === "left" ? -60 : 60, filter: "blur(10px)" },
+          {
+            opacity: 0.15,
+            x: stop.dataset.side === "left" ? -60 : 60,
+            filter: "blur(10px)",
+          },
           {
             opacity: 1,
             x: 0,
@@ -82,7 +86,7 @@ export function Experience() {
       data-section="experience"
       ref={root}
       aria-labelledby="experience-title"
-      className="relative px-5 py-28 md:px-10"
+      className="relative overflow-x-clip px-5 py-28 md:px-10"
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeader
@@ -133,7 +137,7 @@ export function Experience() {
           />
 
           <ol className="relative flex h-full min-h-[inherit] flex-col justify-around gap-24 py-[8%]">
-            <li aria-hidden className="hud absolute -top-2 left-1/2 -translate-x-1/2">
+            <li aria-hidden className="absolute -top-2 left-1/2 -translate-x-1/2 hud">
               Origin
             </li>
             {experience.map((item, i) => {
@@ -154,18 +158,18 @@ export function Experience() {
                     />
                     <p className="hud tabular-nums">{item.period}</p>
                   </div>
-                  <h3 className="font-display mt-4 text-2xl leading-tight font-extrabold uppercase [font-stretch:125%]">
+                  <h3 className="mt-4 font-display text-2xl leading-tight font-extrabold uppercase [font-stretch:125%]">
                     {item.role}
                   </h3>
-                  <p className="text-ink mt-2">{item.company}</p>
-                  <p className="text-ink-dim mt-3 text-sm leading-relaxed">{item.note}</p>
+                  <p className="mt-2 text-ink">{item.company}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-dim">{item.note}</p>
                   <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
                     <span className="hud">{item.location}</span>
                     <a
                       href={item.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="hud hover:text-accent transition-colors"
+                      className="hud transition-colors hover:text-accent"
                     >
                       Visit organization ↗
                     </a>

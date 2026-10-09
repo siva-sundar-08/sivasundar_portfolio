@@ -48,11 +48,13 @@ export type HeroSceneProps = {
   mode: Mode;
 };
 
-const PALETTES: Record<Mode, { a: string; b: string; c: string; v0: string; v1: string }> =
-  {
-    void: { a: "#3ef0ff", b: "#8b5cff", c: "#ff3dc0", v0: "#030309", v1: "#141a4a" },
-    aurora: { a: "#c8ff3d", b: "#3ef0ff", c: "#8b5cff", v0: "#02080b", v1: "#0d3040" },
-  };
+const PALETTES: Record<
+  Mode,
+  { a: string; b: string; c: string; v0: string; v1: string }
+> = {
+  void: { a: "#3ef0ff", b: "#8b5cff", c: "#ff3dc0", v0: "#030309", v1: "#141a4a" },
+  aurora: { a: "#c8ff3d", b: "#3ef0ff", c: "#8b5cff", v0: "#02080b", v1: "#0d3040" },
+};
 
 const damp = (current: number, target: number, lambda: number, dt: number) =>
   current + (target - current) * (1 - Math.exp(-lambda * dt));
@@ -110,7 +112,15 @@ class Shared {
 
 /* ───────────── Director: smooths scroll and palette once per frame ───────────── */
 
-function Director({ live, shared, mode }: { live: LiveState; shared: Shared; mode: Mode }) {
+function Director({
+  live,
+  shared,
+  mode,
+}: {
+  live: LiveState;
+  shared: Shared;
+  mode: Mode;
+}) {
   const targets = useMemo(() => toPalette(mode), [mode]);
 
   useFrame((_, dt) => {
@@ -292,7 +302,13 @@ function Rings({ shared }: { shared: Shared }) {
         <mesh key={ring.radius} rotation={[...ring.tilt]}>
           <torusGeometry args={[ring.radius, ring.tube, 8, 200]} />
           <meshBasicMaterial
-            color={ring.color === "a" ? shared.colA : ring.color === "b" ? shared.colB : shared.colC}
+            color={
+              ring.color === "a"
+                ? shared.colA
+                : ring.color === "b"
+                  ? shared.colB
+                  : shared.colC
+            }
             toneMapped={false}
             transparent
             opacity={0.9}
@@ -432,13 +448,19 @@ function Effects({ shared, live }: { shared: Shared; live: LiveState }) {
     const effect = aberration.current;
     if (!effect) return;
     const speed = Math.min(Math.abs(live.velocity) / 4000, 1);
-    const amount = 0.0006 + speed * 0.004 + Math.sin(shared.phases.dive * Math.PI) * 0.004;
+    const amount =
+      0.0006 + speed * 0.004 + Math.sin(shared.phases.dive * Math.PI) * 0.004;
     effect.offset.set(amount, amount * 0.6);
   });
 
   return (
     <EffectComposer multisampling={0}>
-      <Bloom mipmapBlur intensity={1.15} luminanceThreshold={0.18} luminanceSmoothing={0.3} />
+      <Bloom
+        mipmapBlur
+        intensity={1.15}
+        luminanceThreshold={0.18}
+        luminanceSmoothing={0.3}
+      />
       <ChromaticAberration
         ref={aberration}
         offset={offset}

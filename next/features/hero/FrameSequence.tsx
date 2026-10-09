@@ -109,7 +109,7 @@ export default function FrameSequence({
     <>
       <canvas ref={canvasRef} className="absolute inset-0 size-full" aria-hidden />
       {loaded < count ? (
-        <div className="hud absolute right-6 bottom-24 tabular-nums" aria-hidden>
+        <div className="absolute right-6 bottom-24 hud tabular-nums" aria-hidden>
           Buffering {Math.round((loaded / count) * 100)}%
         </div>
       ) : null}

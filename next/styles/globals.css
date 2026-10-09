@@ -81,10 +81,11 @@
 
   body {
     min-height: 100dvh;
+    /* clip (not hidden) so sticky and pinned sections keep working. */
+    overflow-x: clip;
     background:
       radial-gradient(120% 80% at 80% -10%, var(--void-2) 0%, transparent 55%),
-      radial-gradient(90% 60% at 0% 40%, var(--void-1) 0%, transparent 60%),
-      var(--void-0);
+      radial-gradient(90% 60% at 0% 40%, var(--void-1) 0%, transparent 60%), var(--void-0);
     background-attachment: fixed;
     font-family: var(--font-sans);
     transition: background-color 600ms var(--ease-out-expo);
@@ -202,12 +203,24 @@
 }
 
 @keyframes grain {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-4%, 3%); }
-  40% { transform: translate(3%, -5%); }
-  60% { transform: translate(-6%, -2%); }
-  80% { transform: translate(5%, 6%); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-4%, 3%);
+  }
+  40% {
+    transform: translate(3%, -5%);
+  }
+  60% {
+    transform: translate(-6%, -2%);
+  }
+  80% {
+    transform: translate(5%, 6%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 /* ───────────────────────── View transitions ───────────────────────── */
@@ -268,8 +281,12 @@
 }
 
 @keyframes scrollcue {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(200%); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
 }
 
 /* ScrambleText: the glyph overlays the real character so layout never moves. */
@@ -301,11 +318,11 @@
     radial-gradient(circle at 50% 60%, transparent 0 18%, var(--void-0) 70%),
     conic-gradient(
       from var(--holo-angle),
-      hsl(var(--hue) 95% 62%),
-      hsl(calc(var(--hue) + 70) 95% 55%),
-      hsl(calc(var(--hue) + 150) 90% 45%),
-      hsl(calc(var(--hue) + 230) 95% 58%),
-      hsl(var(--hue) 95% 62%)
+      var(--holo-1),
+      var(--holo-2),
+      var(--holo-3),
+      var(--holo-4),
+      var(--holo-1)
     );
   filter: blur(38px) saturate(1.25);
   animation: holo-spin 9s var(--ease-warp) infinite alternate;

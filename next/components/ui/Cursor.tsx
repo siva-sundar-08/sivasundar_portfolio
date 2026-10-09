@@ -65,7 +65,13 @@ export function Cursor() {
   if (!enabled) return null;
 
   const size =
-    state.kind === "ring" ? 46 : state.kind === "label" ? 92 : state.kind === "dot" ? 10 : 0;
+    state.kind === "ring"
+      ? 46
+      : state.kind === "label"
+        ? 92
+        : state.kind === "dot"
+          ? 10
+          : 0;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[90]">
@@ -75,7 +81,10 @@ export function Cursor() {
         animate={{
           width: size,
           height: state.kind === "label" ? 92 : size,
-          backgroundColor: state.kind === "dot" || state.kind === "label" ? "#fff" : "rgba(255,255,255,0)",
+          backgroundColor:
+            state.kind === "dot" || state.kind === "label"
+              ? "#fff"
+              : "rgba(255,255,255,0)",
           borderWidth: state.kind === "ring" ? 1 : 0,
           opacity: state.kind === "hidden" || state.kind === "text" ? 0 : 1,
         }}

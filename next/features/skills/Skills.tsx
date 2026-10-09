@@ -19,7 +19,7 @@ export function Skills() {
         <SkillsOrbit />
         <ul className="mt-16 flex flex-wrap gap-3" aria-label="Strengths">
           {skillHighlights.map((item) => (
-            <li key={item} className="hud rounded-full border border-white/10 px-4 py-2">
+            <li key={item} className="rounded-full border border-white/10 px-4 py-2 hud">
               {item}
             </li>
           ))}

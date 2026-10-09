@@ -4,9 +4,13 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { skillGroups } from "@/content/skills";
 import { cn } from "@/lib/cn";
+import { useMediaQuery } from "@/lib/hooks";
 import { ease } from "@/lib/motion";
 
 type Node = { skill: string; group: string; ring: number; phase: number };
+
+const nodeClass =
+  "glass absolute! top-1/2 left-1/2 rounded-full px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] whitespace-nowrap uppercase transition-[color,filter] duration-300 [--glass-blur:8px] md:text-xs";
 
 const RINGS = [
   { radius: 0.36, speed: 0.22 },
@@ -15,6 +19,8 @@ const RINGS = [
 ];
 const TILT = 1.08; // radians from face-on: how far the orbital plane leans back
 const PERSPECTIVE = 2.4;
+/** Narrow screens pull the orbits in and shrink labels so nothing spills off-screen. */
+const COMPACT_REACH = 0.78;
 
 /**
  * Skills as an orbital system projected in real 3D. DOM buttons (not
@@ -23,10 +29,14 @@ const PERSPECTIVE = 2.4;
  */
 export function SkillsOrbit() {
   const stage = useRef<HTMLDivElement>(null);
-  const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const nodeRefs = useRef<Array<HTMLElement | null>>([]);
   const [selected, setSelected] = useState<Node | null>(null);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const frozen = useRef(false);
+  const compact = useMediaQuery("(max-width: 640px)");
+  // On touch screens the orbit is decorative; the legend list carries the content.
+  const touch = useMediaQuery("(pointer: coarse)");
+  const compactRef = useRef(compact);
   const spin = useRef({ offset: 0, velocity: 0, dragging: false, lastX: 0 });
 
   const nodes = useMemo<Node[]>(
@@ -45,6 +55,10 @@ export function SkillsOrbit() {
   useEffect(() => {
     frozen.current = selected !== null;
   }, [selected]);
+
+  useEffect(() => {
+    compactRef.current = compact;
+  }, [compact]);
 
   useEffect(() => {
     const el = stage.current;
@@ -81,17 +95,19 @@ export function SkillsOrbit() {
       }
 
       const size = (el?.clientWidth ?? 0) / 2;
+      const reach = compactRef.current ? COMPACT_REACH : 1;
+      const shrink = compactRef.current ? 0.72 : 1;
       nodes.forEach((node, i) => {
         const button = nodeRefs.current[i];
         if (!button) return;
         const ring = RINGS[node.ring];
         const angle = node.phase + time * ring.speed + s.offset;
-        const x = Math.cos(angle) * ring.radius;
-        const z = Math.sin(angle) * ring.radius;
+        const x = Math.cos(angle) * ring.radius * reach;
+        const z = Math.sin(angle) * ring.radius * reach;
         const y = -z * Math.cos(TILT);
-        const depth = z * Math.sin(TILT);
+        const depth = (z / reach) * Math.sin(TILT);
         const scale = PERSPECTIVE / (PERSPECTIVE - depth);
-        button.style.transform = `translate3d(${x * size * scale}px, ${y * size * scale}px, 0) translate(-50%, -50%) scale(${scale})`;
+        button.style.transform = `translate3d(${x * size}px, ${y * size}px, 0) translate(-50%, -50%) scale(${scale * shrink})`;
         button.style.zIndex = String(Math.round(100 + depth * 100));
         button.style.opacity = String(0.35 + ((depth + 1) / 2) * 0.65);
       });
@@ -136,31 +152,33 @@ export function SkillsOrbit() {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         data-cursor="Drag"
-        className="relative mx-auto aspect-square w-full max-w-[640px] touch-pan-y select-none"
+        className="relative mx-auto aspect-[5/4] w-full max-w-[640px] touch-pan-y select-none sm:aspect-square"
       >
         <svg
           aria-hidden
           viewBox="-1 -1 2 2"
           className="pointer-events-none absolute inset-0 size-full overflow-visible"
         >
-          {RINGS.map((ring, i) => (
-            <ellipse
-              key={ring.radius}
-              cx="0"
-              cy="0"
-              rx={ring.radius}
-              ry={ring.radius * Math.cos(TILT)}
-              fill="none"
-              stroke={
-                activeGroup === skillGroups[i].id || selected?.ring === i
-                  ? "var(--accent)"
-                  : "rgb(255 255 255 / 0.14)"
-              }
-              strokeWidth="0.003"
-              strokeDasharray={i === 1 ? "0.01 0.012" : undefined}
-              style={{ transition: "stroke 400ms" }}
-            />
-          ))}
+          <g transform={compact ? `scale(${COMPACT_REACH})` : undefined}>
+            {RINGS.map((ring, i) => (
+              <ellipse
+                key={ring.radius}
+                cx="0"
+                cy="0"
+                rx={ring.radius}
+                ry={ring.radius * Math.cos(TILT)}
+                fill="none"
+                stroke={
+                  activeGroup === skillGroups[i].id || selected?.ring === i
+                    ? "var(--accent)"
+                    : "rgb(255 255 255 / 0.14)"
+                }
+                strokeWidth="0.003"
+                strokeDasharray={i === 1 ? "0.01 0.012" : undefined}
+                style={{ transition: "stroke 400ms" }}
+              />
+            ))}
+          </g>
         </svg>
 
         <div
@@ -172,31 +190,47 @@ export function SkillsOrbit() {
           </span>
         </div>
 
-        <ul aria-label="Skills" className="absolute inset-0">
+        <ul
+          aria-label={touch ? undefined : "Skills"}
+          aria-hidden={touch || undefined}
+          className="absolute inset-0"
+        >
           {nodes.map((node, i) => {
             const isSelected = selected?.skill === node.skill;
             const dim = activeGroup !== null && activeGroup !== node.group;
             return (
               <li key={node.skill}>
-                <button
-                  ref={(el) => {
-                    nodeRefs.current[i] = el;
-                  }}
-                  type="button"
-                  aria-describedby="skill-detail"
-                  onPointerEnter={() => setSelected(node)}
-                  onPointerLeave={() => setSelected(null)}
-                  onFocus={() => setSelected(node)}
-                  onBlur={() => setSelected(null)}
-                  className={cn(
-                    "glass absolute! top-1/2 left-1/2 rounded-full px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] whitespace-nowrap uppercase transition-[color,filter] duration-300 [--glass-blur:8px] md:text-xs",
-                    isSelected && "text-[var(--void-0)] [--glass-fill:var(--accent)]",
-                    dim && "brightness-50",
-                  )}
-                  style={{ transform: "translate(-50%, -50%)" }}
-                >
-                  {node.skill}
-                </button>
+                {touch ? (
+                  <span
+                    ref={(el) => {
+                      nodeRefs.current[i] = el;
+                    }}
+                    className={cn(nodeClass, dim && "brightness-50")}
+                    style={{ transform: "translate(-50%, -50%)" }}
+                  >
+                    {node.skill}
+                  </span>
+                ) : (
+                  <button
+                    ref={(el) => {
+                      nodeRefs.current[i] = el;
+                    }}
+                    type="button"
+                    aria-describedby="skill-detail"
+                    onPointerEnter={() => setSelected(node)}
+                    onPointerLeave={() => setSelected(null)}
+                    onFocus={() => setSelected(node)}
+                    onBlur={() => setSelected(null)}
+                    className={cn(
+                      nodeClass,
+                      isSelected && "text-[var(--void-0)] [--glass-fill:var(--accent)]",
+                      dim && "brightness-50",
+                    )}
+                    style={{ transform: "translate(-50%, -50%)" }}
+                  >
+                    {node.skill}
+                  </button>
+                )}
               </li>
             );
           })}
@@ -218,22 +252,29 @@ export function SkillsOrbit() {
                   <p className="hud">
                     <span className="text-accent">NODE</span> · {group?.title}
                   </p>
-                  <p className="display-wide mt-3 text-3xl uppercase">{selected.skill}</p>
-                  <p className="text-ink-dim mt-3 text-sm leading-relaxed">{group?.summary}</p>
+                  <p className="mt-3 display-wide text-3xl uppercase">{selected.skill}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-dim">
+                    {group?.summary}
+                  </p>
                 </>
               ) : group ? (
                 <>
                   <p className="hud">
-                    <span className="text-accent">ORBIT</span> · {group.skills.length} nodes
+                    <span className="text-accent">ORBIT</span> · {group.skills.length}{" "}
+                    nodes
                   </p>
-                  <p className="display-wide mt-3 text-3xl uppercase">{group.title}</p>
-                  <p className="text-ink-dim mt-3 text-sm leading-relaxed">{group.summary}</p>
+                  <p className="mt-3 display-wide text-3xl uppercase">{group.title}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-dim">
+                    {group.summary}
+                  </p>
                 </>
               ) : (
                 <>
                   <p className="hud">Idle</p>
-                  <p className="text-ink-dim mt-3 text-sm leading-relaxed">
-                    Hover, focus or tap a node to inspect it. Drag the system to spin it.
+                  <p className="mt-3 text-sm leading-relaxed text-ink-dim">
+                    {touch
+                      ? "Tap an orbit below to light it up. Drag the system to spin it."
+                      : "Hover or focus a node to inspect it. Drag the system to spin it."}
                   </p>
                 </>
               )}
@@ -247,10 +288,14 @@ export function SkillsOrbit() {
               <button
                 type="button"
                 aria-pressed={activeGroup === g.id}
-                onClick={() => setActiveGroup((current) => (current === g.id ? null : g.id))}
+                onClick={() =>
+                  setActiveGroup((current) => (current === g.id ? null : g.id))
+                }
                 className={cn(
-                  "flex w-full items-center justify-between rounded-2xl border border-white/10 px-5 py-4 text-left transition-colors duration-300",
-                  activeGroup === g.id ? "border-[var(--accent)] bg-white/[0.05]" : "hover:bg-white/[0.03]",
+                  "flex w-full flex-col items-start gap-2 rounded-2xl border border-white/10 px-5 py-4 text-left transition-colors duration-300 sm:flex-row sm:items-center sm:justify-between",
+                  activeGroup === g.id
+                    ? "border-[var(--accent)] bg-white/[0.05]"
+                    : "hover:bg-white/[0.03]",
                 )}
               >
                 <span className="flex items-center gap-4">
@@ -259,7 +304,7 @@ export function SkillsOrbit() {
                     {g.title}
                   </span>
                 </span>
-                <span className="hud hidden text-right sm:inline">{g.skills.join(" · ")}</span>
+                <span className="hud sm:text-right">{g.skills.join(" · ")}</span>
               </button>
             </li>
           ))}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { detectQuality, type Quality } from "./quality";
 
 export function useMediaQuery(query: string, serverValue = false): boolean {
   return useSyncExternalStore(
@@ -12,17 +11,5 @@ export function useMediaQuery(query: string, serverValue = false): boolean {
     },
     () => window.matchMedia(query).matches,
     () => serverValue,
-  );
-}
-
-let cachedQuality: Quality | null = null;
-const noopSubscribe = () => () => {};
-
-/** Render tier for WebGL; `null` during SSR and the first hydration pass. */
-export function useQuality(): Quality | null {
-  return useSyncExternalStore(
-    noopSubscribe,
-    () => (cachedQuality ??= detectQuality()),
-    () => null,
   );
 }

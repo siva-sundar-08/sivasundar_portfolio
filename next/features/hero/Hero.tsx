@@ -7,7 +7,8 @@ import { Magnetic } from "@/components/ui/Magnetic";
 import { heroSequence } from "@/content/hero";
 import { site } from "@/content/site";
 import { gsap, registerGsap, useGSAP } from "@/lib/gsap";
-import { useMediaQuery, useQuality } from "@/lib/hooks";
+import { useMediaQuery } from "@/lib/hooks";
+import { detectQuality, type Quality } from "@/lib/quality";
 import { createLiveState, stageAt, stages } from "./timeline";
 
 const HeroScene = dynamic(() => import("./scene/HeroScene"), { ssr: false });
@@ -18,10 +19,9 @@ const letters = (word: string) => word.split("");
 export function Hero() {
   const section = useRef<HTMLElement>(null);
   const live = useMemo(() => createLiveState(), []);
-  const quality = useQuality();
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
   const { mode } = useMode();
-  const [armed, setArmed] = useState(false);
+  const [quality, setQuality] = useState<Quality | null>(null);
   const [active, setActive] = useState(true);
   const [sceneReady, setSceneReady] = useState(false);
 
@@ -32,24 +32,39 @@ export function Hero() {
   const turbulence = useRef<SVGFETurbulenceElement>(null);
   const displacement = useRef<SVGFEDisplacementMapElement>(null);
 
-  const useWebGL = quality === "high" || quality === "low";
-
-  // Load WebGL only after the page is idle so it never competes with first paint.
+  // WebGL (and the GPU probe that picks its quality tier) loads on the
+  // visitor's first sign of intent: scroll, pointer, touch or key. Until
+  // then the poster stands in, so first load does no 3D work at all.
   useEffect(() => {
-    if (!useWebGL || reduced) return;
-    const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
-    const cancel = window.cancelIdleCallback ?? window.clearTimeout;
-    const handle = idle(() => setArmed(true));
-    return () => cancel(handle);
-  }, [useWebGL, reduced]);
+    if (reduced) return;
+    const events = [
+      "wheel",
+      "scroll",
+      "pointermove",
+      "pointerdown",
+      "touchstart",
+      "keydown",
+    ];
+    const arm = () => {
+      events.forEach((type) => window.removeEventListener(type, arm));
+      setQuality(detectQuality());
+    };
+    events.forEach((type) =>
+      window.addEventListener(type, arm, { passive: true, once: true }),
+    );
+    return () => events.forEach((type) => window.removeEventListener(type, arm));
+  }, [reduced]);
 
   // Pause rendering while the hero is off-screen.
   useEffect(() => {
     const el = section.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting), {
-      rootMargin: "10% 0px",
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => setActive(entry.isIntersecting),
+      {
+        rootMargin: "10% 0px",
+      },
+    );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
@@ -82,11 +97,11 @@ export function Hero() {
             const stage = stageAt(self.progress);
             if (stageRef.current) stageRef.current.textContent = stage.label;
             if (percentRef.current)
-              percentRef.current.textContent = String(Math.round(self.progress * 100)).padStart(
-                3,
-                "0",
-              );
-            if (barRef.current) barRef.current.style.transform = `scaleX(${self.progress})`;
+              percentRef.current.textContent = String(
+                Math.round(self.progress * 100),
+              ).padStart(3, "0");
+            if (barRef.current)
+              barRef.current.style.transform = `scaleX(${self.progress})`;
             if (coordsRef.current) {
               const z = 16 - self.progress * 29;
               coordsRef.current.textContent = `Z ${z.toFixed(2)} · FOV ${(42 + Math.sin(self.progress * Math.PI) * 30).toFixed(1)}`;
@@ -95,7 +110,11 @@ export function Hero() {
         },
       });
 
-      tl.to(".hero-intro", { opacity: 0, y: -60, filter: "blur(12px)", duration: 0.1, ease: "power2.in" }, 0.02)
+      tl.to(
+        ".hero-intro",
+        { opacity: 0, y: -60, filter: "blur(12px)", duration: 0.1, ease: "power2.in" },
+        0.02,
+      )
         .fromTo(
           ".hero-letter",
           { opacity: 0, yPercent: 110, rotateX: -85, filter: "blur(14px)" },
@@ -136,7 +155,7 @@ export function Hero() {
     { scope: section, dependencies: [reduced] },
   );
 
-  const showScene = armed && !reduced;
+  const showScene = (quality === "high" || quality === "low") && !reduced;
 
   return (
     <section
@@ -173,7 +192,7 @@ export function Hero() {
           style={{ opacity: sceneReady ? 0 : 1 }}
         >
           <div className="absolute top-1/2 left-1/2 size-[min(70vmin,560px)] -translate-1/2 rounded-full bg-[radial-gradient(circle_at_40%_35%,color-mix(in_oklab,var(--accent)_45%,transparent),transparent_55%),radial-gradient(circle_at_65%_70%,color-mix(in_oklab,var(--accent-2)_55%,transparent),transparent_60%)] opacity-60 blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 size-[min(46vmin,360px)] -translate-1/2 rounded-full border border-white/10 [background:conic-gradient(from_120deg,transparent,color-mix(in_oklab,var(--accent)_40%,transparent),transparent_40%,color-mix(in_oklab,var(--accent-3)_35%,transparent),transparent_75%)] opacity-50 [mask:radial-gradient(circle,transparent_62%,#000_63%,#000_64%,transparent_65%)]" />
+          <div className="absolute top-1/2 left-1/2 size-[min(46vmin,360px)] -translate-1/2 rounded-full border border-white/10 opacity-50 [background:conic-gradient(from_120deg,transparent,color-mix(in_oklab,var(--accent)_40%,transparent),transparent_40%,color-mix(in_oklab,var(--accent-3)_35%,transparent),transparent_75%)] [mask:radial-gradient(circle,transparent_62%,#000_63%,#000_64%,transparent_65%)]" />
         </div>
 
         {showScene ? (
@@ -197,7 +216,7 @@ export function Hero() {
         {/* Intro: what the visitor sees before scrolling. */}
         <div className="hero-intro pointer-events-none absolute inset-x-0 bottom-[18svh] flex flex-col items-center gap-5 text-center motion-reduce:hidden">
           <p className="hud">Siva Sundar · iOS & Web</p>
-          <p className="font-display text-ink-dim max-w-md px-6 text-lg [font-stretch:115%] md:text-xl">
+          <p className="max-w-md px-6 font-display text-lg text-ink-dim [font-stretch:115%] md:text-xl">
             A signal is forming. Scroll to bring it into focus.
           </p>
           <span className="relative block h-14 w-px overflow-hidden bg-white/10">
@@ -207,7 +226,10 @@ export function Hero() {
 
         {/* Portal reveal */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
-          <h1 id="hero-title" className="hero-name [filter:url(#hero-warp)] motion-reduce:[filter:none]">
+          <h1
+            id="hero-title"
+            className="hero-name [filter:url(#hero-warp)] motion-reduce:[filter:none]"
+          >
             <span className="sr-only">
               {site.name}, {site.roles.join(" and ")}
             </span>
@@ -215,12 +237,12 @@ export function Hero() {
               {[site.firstName, site.lastName].map((word) => (
                 <span
                   key={word}
-                  className="display-wide block text-[clamp(3.4rem,15vw,13.5rem)] whitespace-nowrap"
+                  className="block display-wide text-[clamp(3.4rem,15vw,13.5rem)] whitespace-nowrap"
                 >
                   {letters(word).map((char, i) => (
                     <span
                       key={`${word}-${i}`}
-                      className="hero-letter inline-block opacity-0 [transform-origin:50%_100%] motion-reduce:opacity-100"
+                      className="hero-letter inline-block [transform-origin:50%_100%] opacity-0 motion-reduce:opacity-100"
                     >
                       {char}
                     </span>
@@ -229,12 +251,12 @@ export function Hero() {
               ))}
             </span>
           </h1>
-          <p className="hero-reveal hud mt-8 opacity-0 motion-reduce:opacity-100">
+          <p className="hero-reveal mt-8 hud opacity-0 motion-reduce:opacity-100">
             <span className="text-accent">{site.roles[0]}</span>
             <span className="mx-3 text-white/30">/</span>
             <span>{site.roles[1]}</span>
           </p>
-          <p className="hero-reveal text-ink-dim mt-5 max-w-xl text-sm leading-relaxed opacity-0 md:text-base motion-reduce:opacity-100">
+          <p className="hero-reveal mt-5 max-w-xl text-sm leading-relaxed text-ink-dim opacity-0 motion-reduce:opacity-100 md:text-base">
             {site.tagline}
           </p>
           <div className="hero-reveal mt-9 flex flex-wrap justify-center gap-3 opacity-0 motion-reduce:opacity-100">
@@ -262,7 +284,7 @@ export function Hero() {
         {/* HUD */}
         <div
           aria-hidden
-          className="hero-hud pointer-events-none absolute inset-x-5 bottom-5 flex items-end justify-between gap-6 md:inset-x-8 md:bottom-7 motion-reduce:hidden"
+          className="hero-hud pointer-events-none absolute inset-x-5 bottom-5 flex items-end justify-between gap-6 motion-reduce:hidden md:inset-x-8 md:bottom-7"
         >
           <div className="flex flex-col gap-2">
             <span className="hud">
@@ -278,7 +300,7 @@ export function Hero() {
               SEQ <span ref={percentRef}>000</span>%
             </span>
           </div>
-          <span ref={coordsRef} className="hud hidden tabular-nums sm:block">
+          <span ref={coordsRef} className="hidden hud tabular-nums sm:block">
             Z 16.00 · FOV 42.0
           </span>
         </div>

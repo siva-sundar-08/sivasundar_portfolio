@@ -26,7 +26,8 @@ function useActiveSection(enabled: boolean): string {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) setActive((entry.target as HTMLElement).dataset.section ?? "hero");
+          if (entry.isIntersecting)
+            setActive((entry.target as HTMLElement).dataset.section ?? "hero");
         }
       },
       { rootMargin: "-45% 0px -50% 0px" },
@@ -41,8 +42,19 @@ function ProgressRing() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30 });
   return (
-    <svg viewBox="0 0 40 40" className="absolute inset-0 size-full -rotate-90" aria-hidden>
-      <circle cx="20" cy="20" r="18" fill="none" stroke="rgb(255 255 255 / 0.12)" strokeWidth="1.5" />
+    <svg
+      viewBox="0 0 40 40"
+      className="absolute inset-0 size-full -rotate-90"
+      aria-hidden
+    >
+      <circle
+        cx="20"
+        cy="20"
+        r="18"
+        fill="none"
+        stroke="rgb(255 255 255 / 0.12)"
+        strokeWidth="1.5"
+      />
       <motion.circle
         cx="20"
         cy="20"
@@ -67,7 +79,12 @@ function SoundBars({ on }: { on: boolean }) {
           animate={on ? { height: ["30%", `${h * 100}%`, "40%"] } : { height: "25%" }}
           transition={
             on
-              ? { duration: 0.9 + i * 0.15, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }
+              ? {
+                  duration: 0.9 + i * 0.15,
+                  repeat: Infinity,
+                  repeatType: "mirror",
+                  ease: "easeInOut",
+                }
               : { duration: 0.3 }
           }
         />
@@ -88,7 +105,7 @@ export function Nav() {
   const menuButton = useRef<HTMLButtonElement>(null);
 
   const meta = isHome
-    ? sections.find((s) => s.id === active) ?? sections[0]
+    ? (sections.find((s) => s.id === active) ?? sections[0])
     : { code: "SYS//02", label: "Case study" };
 
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
@@ -141,25 +158,32 @@ export function Nav() {
             <button
               type="button"
               onClick={scrollTop}
-              aria-label="Back to top"
+              aria-label="SS, back to top"
               className="relative grid size-10 place-items-center rounded-full"
             >
               <ProgressRing />
-              <span className="font-display text-[11px] font-black [font-stretch:150%]">SS</span>
+              <span className="font-display text-[11px] font-black [font-stretch:150%]">
+                SS
+              </span>
             </button>
           ) : (
             <Link
               href="/"
               transitionTypes={["nav-back"]}
-              aria-label="Home"
+              aria-label="SS, home"
               className="relative grid size-10 place-items-center rounded-full"
             >
               <ProgressRing />
-              <span className="font-display text-[11px] font-black [font-stretch:150%]">SS</span>
+              <span className="font-display text-[11px] font-black [font-stretch:150%]">
+                SS
+              </span>
             </Link>
           )}
 
-          <div className="hud hidden min-w-[9.5rem] overflow-hidden px-3 sm:block" aria-live="polite">
+          <div
+            className="hidden min-w-[9.5rem] overflow-hidden px-3 hud sm:block"
+            aria-live="polite"
+          >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
                 key={meta.code}
@@ -204,17 +228,16 @@ export function Nav() {
             type="button"
             onClick={toggleSound}
             aria-pressed={soundOn}
-            aria-label={soundOn ? "Mute ambient sound" : "Play ambient sound"}
             className={cn(control, "gap-2")}
           >
             <SoundBars on={soundOn} />
-            <span className="hidden sm:inline">{soundOn ? "On" : "Off"}</span>
+            <span className="sr-only sm:not-sr-only">Sound</span>
           </button>
 
           <button
             type="button"
             onClick={toggleMode}
-            aria-label={`Switch to ${mode === "void" ? "Aurora" : "Void"} mode`}
+            aria-label={`${mode} mode, switch to ${mode === "void" ? "aurora" : "void"}`}
             className={cn(control, "gap-2")}
           >
             <span
@@ -259,7 +282,7 @@ export function Nav() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 + i * 0.06, duration: 0.6, ease: ease.outExpo }}
-                className="display-wide flex items-baseline gap-4 py-2 text-[clamp(2.2rem,11vw,4rem)] uppercase"
+                className="flex items-baseline gap-4 py-2 display-wide text-[clamp(1.8rem,8vw,4rem)] uppercase"
               >
                 <span className="hud">0{i + 1}</span>
                 {link.label}
