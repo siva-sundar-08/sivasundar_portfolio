@@ -56,11 +56,11 @@ export function About() {
       gsap.fromTo(
         ".about-portrait",
         {
-          clipPath: "inset(48% 0% 48% 0% round 28px)",
+          clipPath: "inset(48% 0% 48% 0%)",
           filter: "saturate(0) brightness(1.6)",
         },
         {
-          clipPath: "inset(0% 0% 0% 0% round 28px)",
+          clipPath: "inset(0% 0% 0% 0%)",
           filter: "saturate(1) brightness(1)",
           ease: "expo.out",
           duration: 1.4,
@@ -121,27 +121,20 @@ export function About() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-sm [perspective:1200px] lg:max-w-none">
-          <figure className="glass relative overflow-hidden p-3">
-            <div className="about-portrait relative overflow-hidden rounded-[22px]">
+        <div className="relative mx-auto w-full max-w-[15rem] [perspective:1200px] sm:max-w-[17rem] lg:max-w-[19rem]">
+          {/* No frame: the portrait's dark backdrop dissolves straight into the page. */}
+          <figure className="relative">
+            <div className="about-portrait relative [mask-image:radial-gradient(ellipse_70%_75%_at_50%_42%,#000_55%,transparent_100%)]">
               <Image
                 src={site.portrait.src}
                 width={site.portrait.width}
                 height={site.portrait.height}
                 alt={site.portrait.alt}
-                sizes="(min-width: 1024px) 34vw, 90vw"
+                sizes="(min-width: 1024px) 304px, 272px"
                 className="h-auto w-full"
               />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,rgb(255_255_255/0.035)_0_1px,transparent_1px_4px)] mix-blend-overlay"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_22%,transparent),transparent_40%,color-mix(in_oklab,var(--accent-3)_18%,transparent))] mix-blend-color"
-              />
             </div>
-            <figcaption className="mt-3 flex justify-between px-1 hud">
+            <figcaption className="-mt-2 flex justify-center gap-4 hud">
               <span>ID · SS-0001</span>
               <span className="text-accent">● Online</span>
             </figcaption>
@@ -153,11 +146,11 @@ export function About() {
                 key={spec.label}
                 data-depth={(i % 2) + 1}
                 className={[
-                  "glass absolute! w-48 px-4 py-3 [--glass-blur:14px]",
-                  i === 0 && "-top-6 -left-16",
-                  i === 1 && "top-1/4 -right-14",
-                  i === 2 && "bottom-1/4 -left-20",
-                  i === 3 && "-right-8 -bottom-8",
+                  "glass absolute! w-40 px-4 py-3 [--glass-blur:14px]",
+                  i === 0 && "top-2 -left-32",
+                  i === 1 && "top-1/4 -right-28",
+                  i === 2 && "bottom-1/4 -left-36",
+                  i === 3 && "-right-24 bottom-2",
                 ]
                   .filter(Boolean)
                   .join(" ")}
