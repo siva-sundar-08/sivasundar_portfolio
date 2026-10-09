@@ -17,7 +17,10 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
  * Set CONTACT_FORMSUBMIT_ID to your FormSubmit email or random alias. Without
  * it, development logs the message and reports success; production refuses.
  */
-export async function sendMessage(_prev: ContactState, formData: FormData): Promise<ContactState> {
+export async function sendMessage(
+  _prev: ContactState,
+  formData: FormData,
+): Promise<ContactState> {
   const values = {
     name: String(formData.get("name") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim(),
@@ -32,8 +35,10 @@ export async function sendMessage(_prev: ContactState, formData: FormData): Prom
   const fields: NonNullable<Extract<ContactState, { status: "error" }>["fields"]> = {};
   if (values.name.length < 2) fields.name = "Tell me your name.";
   if (!EMAIL.test(values.email)) fields.email = "That email doesn't look right.";
-  if (values.message.length < 10) fields.message = "A little more detail, please (10+ characters).";
-  if (values.message.length > 4000) fields.message = "Please keep it under 4000 characters.";
+  if (values.message.length < 10)
+    fields.message = "A little more detail, please (10+ characters).";
+  if (values.message.length > 4000)
+    fields.message = "Please keep it under 4000 characters.";
   if (Object.keys(fields).length > 0) {
     return { status: "error", message: "Check the highlighted fields.", fields, values };
   }
@@ -52,17 +57,20 @@ export async function sendMessage(_prev: ContactState, formData: FormData): Prom
   }
 
   try {
-    const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(target)}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        ...values,
-        _subject: `Portfolio uplink from ${values.name}`,
-        _template: "table",
-        _replyto: values.email,
-      }),
-      signal: AbortSignal.timeout(10_000),
-    });
+    const response = await fetch(
+      `https://formsubmit.co/ajax/${encodeURIComponent(target)}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          ...values,
+          _subject: `Portfolio uplink from ${values.name}`,
+          _template: "table",
+          _replyto: values.email,
+        }),
+        signal: AbortSignal.timeout(10_000),
+      },
+    );
     if (!response.ok) throw new Error(`FormSubmit responded ${response.status}`);
     return { status: "success", name: values.name, simulated: false };
   } catch (error) {

@@ -14,7 +14,7 @@ export function Footer() {
                 href={social.href}
                 target="_blank"
                 rel="noreferrer"
-                className="hud hover:text-accent transition-colors"
+                className="hud transition-colors hover:text-accent"
               >
                 {social.label} ↗
               </a>
@@ -25,7 +25,7 @@ export function Footer() {
               href={site.cvUrl}
               target="_blank"
               rel="noreferrer"
-              className="hud hover:text-accent transition-colors"
+              className="hud transition-colors hover:text-accent"
             >
               CV ↗
             </a>

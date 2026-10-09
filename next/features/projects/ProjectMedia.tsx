@@ -16,7 +16,13 @@ type ProjectMediaProps = {
  * of a `.group` ancestor.
  */
 export function ProjectMedia({ project, className, priority, sizes }: ProjectMediaProps) {
-  const style = { "--hue": project.hue } as CSSProperties;
+  const hue = (offset: number) => `hsl(${(project.hue + offset) % 360} 95% 60%)`;
+  const style = {
+    "--holo-1": hue(0),
+    "--holo-2": hue(70),
+    "--holo-3": hue(150),
+    "--holo-4": hue(230),
+  } as CSSProperties;
 
   return (
     <div
@@ -25,7 +31,7 @@ export function ProjectMedia({ project, className, priority, sizes }: ProjectMed
     >
       <div
         aria-hidden
-        className="holo-field absolute inset-[-40%] opacity-70 transition-opacity duration-700 group-hover:opacity-100"
+        className="holo-field absolute inset-[-40%] opacity-45 transition-opacity duration-700 group-hover:opacity-90"
       />
       {project.cover ? (
         <Image

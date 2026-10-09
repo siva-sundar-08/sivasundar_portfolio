@@ -16,7 +16,12 @@ type MorphHeadingProps = {
  * scrolls into view. It is one left-aligned text node, so its start
  * position never moves and the morph causes no layout shift.
  */
-export function MorphHeading({ children, id, className, as: Tag = "h2" }: MorphHeadingProps) {
+export function MorphHeading({
+  children,
+  id,
+  className,
+  as: Tag = "h2",
+}: MorphHeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
 
   useGSAP(

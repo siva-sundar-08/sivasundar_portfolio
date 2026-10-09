@@ -50,7 +50,7 @@ function Field({
       )}
       <label
         htmlFor={id}
-        className="hud pointer-events-none absolute top-0 left-0 transition-all duration-300 peer-focus:text-[var(--accent)]"
+        className="pointer-events-none absolute top-0 left-0 hud transition-all duration-300 peer-focus:text-[var(--accent)]"
       >
         {label}
       </label>
@@ -67,7 +67,15 @@ function Field({
   );
 }
 
-function Success({ name, simulated, onReset }: { name: string; simulated: boolean; onReset: () => void }) {
+function Success({
+  name,
+  simulated,
+  onReset,
+}: {
+  name: string;
+  simulated: boolean;
+  onReset: () => void;
+}) {
   return (
     <motion.div
       key="success"
@@ -85,7 +93,12 @@ function Success({ name, simulated, onReset }: { name: string; simulated: boolea
             className="absolute inset-0 rounded-full border border-[var(--accent)]"
             initial={{ scale: 0.4, opacity: 0.9 }}
             animate={{ scale: 2.4, opacity: 0 }}
-            transition={{ duration: 2.4, delay: i * 0.6, repeat: Infinity, ease: ease.outExpo }}
+            transition={{
+              duration: 2.4,
+              delay: i * 0.6,
+              repeat: Infinity,
+              ease: ease.outExpo,
+            }}
           />
         ))}
         <svg viewBox="0 0 52 52" className="relative size-16" aria-hidden>
@@ -113,11 +126,13 @@ function Success({ name, simulated, onReset }: { name: string; simulated: boolea
           />
         </svg>
       </div>
-      <p className="hud mt-10">
+      <p className="mt-10 hud">
         <span className="text-accent">Uplink</span> · Signal received
       </p>
-      <p className="display-wide mt-4 text-3xl uppercase md:text-4xl">Thanks, {name.split(" ")[0]}</p>
-      <p className="text-ink-dim mt-4 max-w-sm text-sm">
+      <p className="mt-4 display-wide text-3xl uppercase md:text-4xl">
+        Thanks, {name.split(" ")[0]}
+      </p>
+      <p className="mt-4 max-w-sm text-sm text-ink-dim">
         {simulated
           ? "Development mode: the message was logged on the server, not emailed."
           : "Your message is on its way. Expect a reply in your inbox."}
@@ -125,7 +140,7 @@ function Success({ name, simulated, onReset }: { name: string; simulated: boolea
       <button
         type="button"
         onClick={onReset}
-        className="hud hover:text-accent mt-8 underline-offset-4 transition-colors hover:underline"
+        className="mt-8 hud underline-offset-4 transition-colors hover:text-accent hover:underline"
       >
         Send another
       </button>

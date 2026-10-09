@@ -26,7 +26,14 @@ export const metadata: Metadata = {
   description: site.description,
   applicationName: `${site.name} Portfolio`,
   authors: [{ name: site.name, url: site.socials[0].href }],
-  keywords: ["iOS developer", "SwiftUI", "React", "web developer", "portfolio", site.name],
+  keywords: [
+    "iOS developer",
+    "SwiftUI",
+    "React",
+    "web developer",
+    "portfolio",
+    site.name,
+  ],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -36,7 +43,11 @@ export const metadata: Metadata = {
     description: site.description,
     locale: "en_US",
   },
-  twitter: { card: "summary_large_image", title: site.title, description: site.description },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+  },
   robots: { index: true, follow: true },
 };
 
@@ -59,7 +70,11 @@ const personJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${display.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: modeInitScript }} />
       </head>

@@ -35,7 +35,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
   };
 
   return (
-    <div className="project-card w-[min(84vw,440px)] shrink-0 snap-center [transform-style:preserve-3d] lg:w-[min(36vw,520px)]">
+    <div className="project-card w-[min(84vw,440px)] shrink-0 snap-center [transform-style:preserve-3d] lg:w-[min(30vw,calc((100svh-230px)/1.2),480px)]">
       <motion.article
         onPointerMove={onMove}
         onPointerLeave={reset}
@@ -52,7 +52,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             <ProjectMedia
               project={project}
               priority={index < 2}
-              className="aspect-[4/5] rounded-[22px] md:aspect-[5/6]"
+              className="aspect-[4/5] rounded-[22px] lg:aspect-[5/6]"
             />
           </ViewTransition>
           <div className="flex [transform:translateZ(40px)] items-end justify-between gap-4 px-3 pt-5 pb-3">

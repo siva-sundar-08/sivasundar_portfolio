@@ -43,14 +43,22 @@ export function About() {
             rotateX: -6 * depth,
             opacity: 1,
             ease: "none",
-            scrollTrigger: { trigger: root.current, start: "top 90%", end: "bottom top", scrub: 0.8 },
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top 90%",
+              end: "bottom top",
+              scrub: 0.8,
+            },
           },
         );
       });
 
       gsap.fromTo(
         ".about-portrait",
-        { clipPath: "inset(48% 0% 48% 0% round 28px)", filter: "saturate(0) brightness(1.6)" },
+        {
+          clipPath: "inset(48% 0% 48% 0% round 28px)",
+          filter: "saturate(0) brightness(1.6)",
+        },
         {
           clipPath: "inset(0% 0% 0% 0% round 28px)",
           filter: "saturate(1) brightness(1)",
@@ -65,9 +73,11 @@ export function About() {
     { scope: root },
   );
 
+  // Desktop resolves the text while the section is pinned; mobile resolves
+  // each paragraph as it rises into the lower half of the screen.
   const scrambleRange = desktop
-    ? { start: "top top", end: "+=80%" }
-    : { start: "top 85%", end: "center 35%" };
+    ? { trigger: "section", start: "top top", end: "+=80%" }
+    : { start: "top 95%", end: "top 55%" };
 
   return (
     <section
@@ -81,11 +91,10 @@ export function About() {
         <div>
           <SectionHeader section="about" title="About" />
           <div className="flex max-w-2xl flex-col gap-6 text-lg leading-relaxed md:text-xl">
-            <ScrambleText text={site.bio[0]} trigger="#about" {...scrambleRange} />
+            <ScrambleText text={site.bio[0]} {...scrambleRange} />
             <ScrambleText
               text={site.bio[1]}
               className="text-ink-dim"
-              trigger="#about"
               {...scrambleRange}
             />
           </div>
@@ -132,7 +141,7 @@ export function About() {
                 className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,color-mix(in_oklab,var(--accent)_22%,transparent),transparent_40%,color-mix(in_oklab,var(--accent-3)_18%,transparent))] mix-blend-color"
               />
             </div>
-            <figcaption className="hud mt-3 flex justify-between px-1">
+            <figcaption className="mt-3 flex justify-between px-1 hud">
               <span>ID · SS-0001</span>
               <span className="text-accent">● Online</span>
             </figcaption>
@@ -154,7 +163,7 @@ export function About() {
                   .join(" ")}
               >
                 <dt className="hud">{spec.label}</dt>
-                <dd className="font-display mt-1 text-sm font-semibold [font-stretch:120%]">
+                <dd className="mt-1 font-display text-sm font-semibold [font-stretch:120%]">
                   {spec.value}
                 </dd>
               </div>
@@ -164,7 +173,7 @@ export function About() {
             {site.specs.map((spec) => (
               <div key={spec.label} className="glass px-4 py-3 [--glass-blur:14px]">
                 <dt className="hud">{spec.label}</dt>
-                <dd className="font-display mt-1 text-sm font-semibold">{spec.value}</dd>
+                <dd className="mt-1 font-display text-sm font-semibold">{spec.value}</dd>
               </div>
             ))}
           </dl>

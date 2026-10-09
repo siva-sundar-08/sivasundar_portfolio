@@ -24,7 +24,7 @@ export function Projects() {
         () => {
           const el = track.current;
           if (!el) return;
-          const distance = () => el.scrollWidth - window.innerWidth + 80;
+          const distance = () => el.scrollWidth - window.innerWidth;
 
           const tween = gsap.to(el, {
             x: () => -distance(),
@@ -71,27 +71,30 @@ export function Projects() {
       data-section="projects"
       ref={root}
       aria-labelledby="projects-title"
-      className="relative overflow-hidden py-28 lg:flex lg:min-h-svh lg:flex-col lg:justify-center lg:py-16"
+      className="relative overflow-hidden py-28 lg:flex lg:h-svh lg:items-center lg:py-0"
     >
-      <div className="px-5 md:px-10">
-        <div className="mx-auto max-w-7xl">
+      {/* On desktop the header rides the same horizontal track as the cards. */}
+      <div
+        ref={track}
+        className="flex flex-col gap-4 lg:w-max lg:flex-row lg:items-center lg:gap-10 lg:pr-[10vw] lg:pl-[max(2.5rem,calc((100vw-80rem)/2))]"
+      >
+        <div className="px-5 md:px-10 lg:w-[min(44vw,640px)] lg:shrink-0 lg:px-0 [&_header]:mb-0">
           <SectionHeader
             section="projects"
             title="Work"
             intro="Mobile apps and web builds. Open any artifact for the full case study."
           />
         </div>
-      </div>
-      <div
-        ref={track}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 [perspective:1600px] [scrollbar-width:none] md:px-10 lg:w-max lg:snap-none lg:gap-10 lg:overflow-visible lg:px-[max(2.5rem,calc((100vw-80rem)/2))]"
-      >
-        {projects.map((project, index) => (
-          <ProjectCard key={project.slug} project={project} index={index} />
-        ))}
-        <div className="hud flex w-48 shrink-0 items-center" aria-hidden>
-          End of archive ·{" "}
-          <span className="text-accent ml-1">{String(projects.length).padStart(2, "0")}</span>
+        <div className="flex snap-x snap-mandatory [scrollbar-width:none] gap-6 overflow-x-auto px-5 pt-8 pb-6 [perspective:1600px] md:px-10 lg:snap-none lg:gap-10 lg:overflow-visible lg:p-0">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.slug} project={project} index={index} />
+          ))}
+          <div className="flex w-48 shrink-0 items-center hud" aria-hidden>
+            End of archive ·{" "}
+            <span className="ml-1 text-accent">
+              {String(projects.length).padStart(2, "0")}
+            </span>
+          </div>
         </div>
       </div>
     </section>
