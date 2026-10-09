@@ -12,11 +12,11 @@ type Node = { skill: string; group: string; ring: number; phase: number };
 const nodeClass =
   "glass absolute! top-1/2 left-1/2 rounded-full px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] whitespace-nowrap uppercase transition-[color,filter] duration-300 [--glass-blur:8px] md:text-xs";
 
-const RINGS = [
-  { radius: 0.36, speed: 0.22 },
-  { radius: 0.62, speed: -0.14 },
-  { radius: 0.88, speed: 0.09 },
-];
+// One ring per skill group, spaced evenly; alternate rings counter-rotate.
+const RINGS = skillGroups.map((_, i, all) => ({
+  radius: 0.3 + (i / Math.max(1, all.length - 1)) * 0.6,
+  speed: (i % 2 === 0 ? 1 : -1) * (0.22 - i * 0.035),
+}));
 const TILT = 1.08; // radians from face-on: how far the orbital plane leans back
 const PERSPECTIVE = 2.4;
 /** Narrow screens pull the orbits in and shrink labels so nothing spills off-screen. */
@@ -252,7 +252,9 @@ export function SkillsOrbit() {
                   <p className="hud">
                     <span className="text-accent">NODE</span> · {group?.title}
                   </p>
-                  <p className="mt-3 display-wide text-3xl uppercase">{selected.skill}</p>
+                  <p className="mt-3 display-wide text-xl uppercase md:text-2xl">
+                    {selected.skill}
+                  </p>
                   <p className="mt-3 text-sm leading-relaxed text-ink-dim">
                     {group?.summary}
                   </p>
@@ -263,7 +265,9 @@ export function SkillsOrbit() {
                     <span className="text-accent">ORBIT</span> · {group.skills.length}{" "}
                     nodes
                   </p>
-                  <p className="mt-3 display-wide text-3xl uppercase">{group.title}</p>
+                  <p className="mt-3 display-wide text-xl uppercase md:text-2xl">
+                    {group.title}
+                  </p>
                   <p className="mt-3 text-sm leading-relaxed text-ink-dim">
                     {group.summary}
                   </p>
@@ -300,7 +304,7 @@ export function SkillsOrbit() {
               >
                 <span className="flex items-center gap-4">
                   <span className="hud text-accent">0{i + 1}</span>
-                  <span className="font-display text-lg font-bold uppercase [font-stretch:125%]">
+                  <span className="font-display text-base font-bold uppercase [font-stretch:125%]">
                     {g.title}
                   </span>
                 </span>

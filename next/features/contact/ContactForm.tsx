@@ -36,7 +36,7 @@ function Field({
     "aria-describedby": error ? `${id}-error` : undefined,
     placeholder: " ",
     className: cn(
-      "peer w-full resize-none border-b bg-transparent pt-7 pb-3 text-lg text-ink outline-none transition-colors duration-300",
+      "peer w-full resize-none border-b bg-transparent pt-7 pb-3 text-base text-ink outline-none transition-colors duration-300",
       error ? "border-[var(--magenta)]" : "border-white/15 focus:border-[var(--accent)]",
     ),
   };
@@ -129,7 +129,7 @@ function Success({
       <p className="mt-10 hud">
         <span className="text-accent">Uplink</span> · Signal received
       </p>
-      <p className="mt-4 display-wide text-3xl uppercase md:text-4xl">
+      <p className="mt-4 display-wide text-2xl uppercase md:text-3xl">
         Thanks, {name.split(" ")[0]}
       </p>
       <p className="mt-4 max-w-sm text-sm text-ink-dim">

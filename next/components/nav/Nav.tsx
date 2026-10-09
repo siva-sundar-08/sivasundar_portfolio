@@ -13,7 +13,6 @@ import { ease, spring } from "@/lib/motion";
 
 const links = [
   { id: "about", label: "About" },
-  { id: "projects", label: "Work" },
   { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "contact", label: "Contact" },
@@ -106,7 +105,7 @@ export function Nav() {
 
   const meta = isHome
     ? (sections.find((s) => s.id === active) ?? sections[0])
-    : { code: "SYS//02", label: "Case study" };
+    : { code: "SYS//--", label: "Off course" };
 
   const href = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
@@ -282,7 +281,7 @@ export function Nav() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 + i * 0.06, duration: 0.6, ease: ease.outExpo }}
-                className="flex items-baseline gap-4 py-2 display-wide text-[clamp(1.8rem,8vw,4rem)] uppercase"
+                className="flex items-baseline gap-4 py-2 display-wide text-[clamp(1.5rem,7vw,2.75rem)] uppercase"
               >
                 <span className="hud">0{i + 1}</span>
                 {link.label}

@@ -53,7 +53,7 @@ export function MorphHeading({
       ref={ref}
       id={id}
       className={cn(
-        "display-wide text-[clamp(2.6rem,9.5vw,8.5rem)] whitespace-nowrap uppercase",
+        "display-wide text-[clamp(2rem,5.5vw,4.75rem)] whitespace-nowrap uppercase",
         className,
       )}
     >

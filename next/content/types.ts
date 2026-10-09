@@ -11,25 +11,6 @@ export type SocialLink = {
   handle: string;
 };
 
-export type ProjectCategory = "mobile" | "web";
-
-export type Project = {
-  slug: string;
-  code: string;
-  title: string;
-  category: ProjectCategory;
-  summary: string;
-  /** Case-study body paragraphs. Replace with your own write-up when ready. */
-  overview: string[];
-  highlights: string[];
-  stack: string[];
-  repo?: string;
-  live?: string;
-  cover?: ImageAsset;
-  /** Base hue (0–360) for the holographic preview when no cover image exists. */
-  hue: number;
-};
-
 export type SkillGroup = {
   id: string;
   title: string;

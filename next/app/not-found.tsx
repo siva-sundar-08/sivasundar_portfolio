@@ -9,7 +9,9 @@ export default function NotFound() {
       <p className="hud">
         <span className="text-accent">ERR//404</span> · Signal lost
       </p>
-      <h1 className="display-wide text-[clamp(3rem,12vw,9rem)] uppercase">Off course</h1>
+      <h1 className="display-wide text-[clamp(2.5rem,8vw,5.5rem)] uppercase">
+        Off course
+      </h1>
       <p className="max-w-md text-ink-dim">
         This coordinate is empty. The page may have moved, or it never existed.
       </p>

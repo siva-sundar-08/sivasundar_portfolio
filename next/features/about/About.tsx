@@ -90,7 +90,7 @@ export function About() {
       <div className="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
           <SectionHeader section="about" title="About" />
-          <div className="flex max-w-2xl flex-col gap-6 text-lg leading-relaxed md:text-xl">
+          <div className="flex max-w-2xl flex-col gap-5 text-base leading-relaxed md:text-[1.0625rem]">
             <ScrambleText text={site.bio[0]} {...scrambleRange} />
             <ScrambleText
               text={site.bio[1]}
@@ -112,10 +112,10 @@ export function About() {
             </Magnetic>
             <Magnetic>
               <a
-                href="#projects"
+                href="#contact"
                 className="glass inline-flex items-center rounded-full px-6 py-3 font-mono text-xs tracking-[0.24em] uppercase"
               >
-                See projects
+                Get in touch
               </a>
             </Magnetic>
           </div>

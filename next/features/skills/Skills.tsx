@@ -14,7 +14,7 @@ export function Skills() {
         <SectionHeader
           section="skills"
           title="Skills"
-          intro="Three orbits around one core: native mobile first, the web alongside it, and the tools that hold both together."
+          intro="Four orbits around one core: native mobile first, then the backend and web stack behind full-stack builds, and the tools that hold it all together."
         />
         <SkillsOrbit />
         <ul className="mt-16 flex flex-wrap gap-3" aria-label="Strengths">

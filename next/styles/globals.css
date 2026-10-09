@@ -225,19 +225,6 @@
 
 /* ───────────────────────── View transitions ───────────────────────── */
 
-::view-transition-group(.morph) {
-  animation-duration: 720ms;
-  animation-timing-function: var(--ease-out-expo);
-}
-::view-transition-image-pair(.morph) {
-  animation-name: via-blur;
-}
-@keyframes via-blur {
-  35% {
-    filter: blur(6px) saturate(1.6);
-  }
-}
-
 ::view-transition-old(.page) {
   animation: 260ms var(--ease-warp) both page-out;
 }
@@ -304,35 +291,4 @@
   opacity: 0.7;
   font-family: var(--font-mono);
   font-size: 0.85em;
-}
-
-/* Holographic preview field used by project media without a cover image. */
-@property --holo-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-.holo-field {
-  background:
-    radial-gradient(circle at 50% 60%, transparent 0 18%, var(--void-0) 70%),
-    conic-gradient(
-      from var(--holo-angle),
-      var(--holo-1),
-      var(--holo-2),
-      var(--holo-3),
-      var(--holo-4),
-      var(--holo-1)
-    );
-  filter: blur(38px) saturate(1.25);
-  animation: holo-spin 9s var(--ease-warp) infinite alternate;
-}
-.group:hover .holo-field {
-  animation-duration: 3.5s;
-}
-
-@keyframes holo-spin {
-  to {
-    --holo-angle: 360deg;
-  }
 }
