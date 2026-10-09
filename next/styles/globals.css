@@ -267,6 +267,48 @@
   }
 }
 
+/* A thin bright band that travels through text, in step with the scroll cue line. */
+.glow-sweep {
+  position: relative;
+  display: inline-block;
+}
+.glow-sweep::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: transparent;
+  background: linear-gradient(
+      90deg,
+      transparent 44%,
+      var(--accent) 48.5%,
+      #fff 50%,
+      var(--accent) 51.5%,
+      transparent 56%
+    )
+    0 0 / 300% 100% no-repeat;
+  background-clip: text;
+  filter: drop-shadow(0 0 4px var(--accent))
+    drop-shadow(0 0 10px color-mix(in oklab, var(--accent) 60%, transparent));
+  animation: glowsweep 2.2s linear infinite;
+}
+@keyframes glowsweep {
+  0% {
+    background-position: 100% 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  75%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glow-sweep::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 @keyframes scrollcue {
   0% {
     transform: translateY(-100%);

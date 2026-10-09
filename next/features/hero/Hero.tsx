@@ -218,7 +218,11 @@ export function Hero() {
 
         {/* Intro: what the visitor sees before scrolling. */}
         <div className="hero-intro pointer-events-none absolute inset-x-0 bottom-[18svh] flex flex-col items-center gap-5 text-center motion-reduce:hidden">
-          <p className="hud">Siva Sundar · Software Engineer</p>
+          <p className="hud">
+            <span className="glow-sweep" data-text="Siva Sundar · Software Engineer">
+              Siva Sundar · Software Engineer
+            </span>
+          </p>
           <p className="max-w-md px-6 font-display text-base text-ink-dim [font-stretch:115%] md:text-lg">
             A signal is forming. Scroll to bring it into focus.
           </p>
