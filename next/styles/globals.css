@@ -267,7 +267,7 @@
   }
 }
 
-/* A thin bright band that travels through text, in step with the scroll cue line. */
+/* A thin bright band that drifts slowly through text, styled after the scroll cue line. */
 .glow-sweep {
   position: relative;
   display: inline-block;
@@ -290,7 +290,7 @@
   background-clip: text;
   filter: drop-shadow(0 0 4px var(--accent))
     drop-shadow(0 0 10px color-mix(in oklab, var(--accent) 60%, transparent));
-  animation: glowsweep 2.2s linear infinite;
+  animation: glowsweep 5s linear infinite;
 }
 @keyframes glowsweep {
   0% {
